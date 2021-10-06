@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обновление SSL сертификата для почтового сервера Zimbra</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(51, 51, 51); color: rgb(255, 255, 255);">
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># cd /letsencrypt</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># /etc/init.d/zimbra stop</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># ./letsencrypt-auto certonly --standalone -d mail.fabrikazig.com.ua</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># /etc/init.d/zimbra start</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># cp /etc/letsencrypt/live/mail.fabrikazig.com.ua/* /opt/zimbra/ssl/letsencrypt/</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># chown zimbra:zimbra /opt/zimbra/ssl/letsencrypt/*</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);"># cd /opt/zimbra/ssl/letsencrypt/</span>
+            изменить chain.pem
+            
+            В конец файла chain.pem добавляем промежуточный сертификат <span class="hljs-keyword" style="color: rgb(252, 194, 140);">Let</span><span class="hljs-comment" style="color: rgb(136, 136, 136);">'s encrypt:</span>
+            
+            -----BEGIN CERTIFICATE-----
+            MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/
+            MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+            DkRTVCBSb290IENBIFgzMB4XDTAwMDkzMDIxMTIxOVoXDTIxMDkzMDE0MDExNVow
+            PzEkMCIGA1UEChMbRGlnaXRhbCBTaWduYXR1cmUgVHJ1c3QgQ28uMRcwFQYDVQQD
+            Ew5EU1QgUm9vdCBDQSBYMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+            AN+v6ZdQCINXtMxiZfaQguzH0yxrMMpb7NnDfcdAwRgUi+DoM3ZJKuM/IUmTrE4O
+            rz5Iy2Xu/NMhD2XSKtkyj4zl93ewEnu1lcCJo6m67XMuegwGMoOifooUMM0RoOEq
+            OLl5CjH9UL2AZd+<span class="hljs-number" style="color: rgb(211, 99, 99);">3</span>UWODyOKIYepLYYHsUmu5ouJLGiifSKOeDNoJjj4XLh7dIN9b
+            xiqKqy69cK3FCxolkHRyxXtqqzTWMIn/<span class="hljs-number" style="color: rgb(211, 99, 99);">5</span>WgTe1QLyNau7Fqckh49ZLOMxt+/yUFw
+            <span class="hljs-number" style="color: rgb(211, 99, 99);">7</span>BZy1SbsOFU5Q9D8/RhcQPGX69Wam40dutolucbY38EVAjqr2m7xPi71XAicPNaD
+            aeQQmxkqtilX4+U9m5/wAl0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNV
+            HQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMSnsaR7LHH62+FLkHX/xBVghYkQMA0GCSqG
+            SIb3DQEBBQUAA4IBAQCjGiybFwBcqR7uKGY3Or+Dxz9LwwmglSBd49lZRNI+DT69
+            ikugdB/OEIKcdBodfpga3csTS7MgROSR6cz8faXbauX+<span class="hljs-number" style="color: rgb(211, 99, 99);">5</span>v3gTt23ADq1cEmv8uXr
+            AvHRAosZy5Q6XkjEGB5YGV8eAlrwDPGxrancWYaLbumR9YbK+rlmM6pZW87ipxZz
+            R8srzJmwN0jP41ZL9c8PDHIyh8bwRLtTcm1D9SZImlJnt1ir/md2cXjbDaJWFBM5
+            JDGFoqgCWjBH4d1QB7wCCZAA62RjYJsWvIjJEubSfZGL+T0yjWW06XyxV3bqxbYo
+            Ob8VZRzI9neWagqNdwvYkQsEjgfbKbYK7p2CNTUQ
+            -----<span class="hljs-keyword" style="color: rgb(252, 194, 140);">END</span> CERTIFICATE-----
+            
+            su zimbra
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  cp /opt/zimbra/ssl/letsencrypt/privkey.pem /opt/zimbra/ssl/zimbra/commercial/commercial.key</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  exit</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  /opt/zimbra/bin/zmcertmgr verifycrt comm privkey.pem cert.pem chain.pem</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  /opt/zimbra/bin/zmcertmgr deploycrt comm cert.pem chain.pem</span>
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  /etc/init.d/zimbra restart</span>
+            </pre>
+    </div>
+</body>
+</html>
