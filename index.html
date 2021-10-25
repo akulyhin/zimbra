@@ -19,7 +19,7 @@
             <span class="hljs-meta" style="color: rgb(252, 155, 155);"># cd /opt/zimbra/ssl/letsencrypt/</span>
             изменить chain.pem
             
-            В конец файла chain.pem добавляем промежуточный сертификат <span class="hljs-keyword" style="color: rgb(252, 194, 140);">Let</span><span class="hljs-comment" style="color: rgb(136, 136, 136);">'s encrypt:</span>
+            В конец файла chain.pem добавляем промежуточный сертификат <span class="hljs-keyword" style="color: rgb(252, 194, 140);">Let's encrypt:</span>
             
             -----BEGIN CERTIFICATE-----
             MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
@@ -83,7 +83,7 @@
             emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
             -----END CERTIFICATE-----
             
-            su zimbra
+            <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  su zimbra</span>
             <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  cp /opt/zimbra/ssl/letsencrypt/privkey.pem /opt/zimbra/ssl/zimbra/commercial/commercial.key</span>
             <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  exit</span>
             <span class="hljs-meta" style="color: rgb(252, 155, 155);">#  /opt/zimbra/bin/zmcertmgr verifycrt comm privkey.pem cert.pem chain.pem</span>
